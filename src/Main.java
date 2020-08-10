@@ -1,10 +1,16 @@
-
+import interpreter.Program;
 
 public class Main {
 
 	public static void main(String[] args) {
 
-		System.out.println("Hello");
+		Program p = new Program();
+		
+		// add some cells 
+		for (int i = 0; i < 30; i++) {
+			p.addCell();
+		}
+		p.print();		
 	}
 
 }
