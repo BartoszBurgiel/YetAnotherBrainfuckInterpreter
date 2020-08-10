@@ -1,0 +1,11 @@
+# go to the src directory
+cd src
+
+# compile the file and the interpreter package and move the files to bin 
+javac -d ../bin Main.java
+
+# go to the bin directory and execute the binaries
+cd ../bin 
+java Main
+
+ 
