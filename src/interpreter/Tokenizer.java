@@ -1,8 +1,5 @@
 package interpreter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Tokenizer {
     
     // the brainfuck code 
@@ -21,8 +18,9 @@ public class Tokenizer {
         this.instructions = new Instructions();
 
         // Iterate over code and tokenize it
-        for (char token : code.toCharArray()) {
+        for (int i = 0; i< code.toCharArray().length; i++) {
             
+            char token = code.toCharArray()[i];
             switch (token) {
                 case '+':
                 instructions.add(Actions.INCREASE_CELL_VALUE);
@@ -49,6 +47,7 @@ public class Tokenizer {
                 instructions.add(Actions.END_LOOP);
                 break;
                 default:
+                
             }
         }
     }

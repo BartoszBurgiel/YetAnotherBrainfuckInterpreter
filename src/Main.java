@@ -7,7 +7,8 @@ public class Main {
 
 		String test = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+++.--.++++++.--------.";
 
-		String loopTest = "++++++++++[>++++++<-]>+++++.";
+		String loopTest = String.format("%s\n%s\n%s", "+++++ ", "+++3++[",">+++[>++<-]<-]>>+++++.");
+
 		Program p = new Program(loopTest);
 	
 		p.run();

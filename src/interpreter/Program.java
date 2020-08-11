@@ -8,9 +8,8 @@ public class Program {
 	// all cells of the program 
 	private List<Cell> cells;
 	
+	private String code;
 
-	// the brainfuck code
-	private String code; 
 
 	// the value of the pointer 
 	// -> the cell that the pointer points to 
@@ -29,8 +28,9 @@ public class Program {
 	// Constructor where the brainfuck code is provided
 	public Program(String code) {
 
-		// set the code member variable 
 		this.code = code;
+
+		this.prepareCode();
 
 		// initialize cells 
 		this.cells = new ArrayList<Cell>();
@@ -171,12 +171,21 @@ public class Program {
 				Instructions loop = instructions.getInterval(i+1, endOfTheLoopIndex);
 
 				
+				// number of the iterations of the loop 
+				int numberOfIterations = 0;
+
 				// run the private run function for as long as the value of the loop's cell 
 				// is not equal 0 
 				while (this.cells.get(loopsCellIndex).getValue() != 1) {
 
 					// run the private run functions with the loop's instructions 
 					this.run(loop);
+					numberOfIterations++;
+
+					if (numberOfIterations > 1000000) {
+						System.out.println("Endless loop detected -> more than 1000000 iterations; aborting.");
+						System.exit(0);
+					}
 				}
 
 				break;
@@ -184,6 +193,11 @@ public class Program {
 				break;
 			}
 		}
+	}
+
+	// prepareCode removes all whitespace and check for illegal characters
+	private void prepareCode() {
+		Helper.checkForIllegalCharacters(this.code);
 	}
 
 	public void visualize() {
