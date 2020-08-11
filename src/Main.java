@@ -7,7 +7,7 @@ public class Main {
 
 		String test = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+++.--.++++++.--------.";
 
-		String loopTest = "[[[[++++---]]]---]";
+		String loopTest = "++++++++++[>++++++<-]>+++++.";
 		Program p = new Program(loopTest);
 	
 		p.run();

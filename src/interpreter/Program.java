@@ -17,7 +17,7 @@ public class Program {
 	private int pointer; 
 	
 	// interpreted code, ready to execute
-	private List<Actions> actions;
+	private Instructions instructions;
 
 	// Basic constructor
 	public Program() {
@@ -40,7 +40,7 @@ public class Program {
 		Tokenizer t = new Tokenizer(code);
 
 		// set the actions member variable
-		this.actions = t.getActions();
+		this.instructions = t.getInstructions();
 	}
 	
 	// print all program's data 
@@ -76,12 +76,22 @@ public class Program {
 		// initiate the 0th cell 
 		this.addCell();
 
+		// run the private run method and pass the 
+		// classe's instructions
+		this.run(this.instructions);
+
+		
+		System.out.println("");
+	}
+
+	// run the given instructions
+	private void run(Instructions instructions) {
 		// iterate over the instructions
-		for (int i = 0; i < this.actions.size(); i++) {
+		for (int i = 0; i < instructions.size(); i++) {
 			
 			
 			// determine what to do 
-			switch (this.actions.get(i)) {
+			switch (instructions.get(i)) {
 				case INCREASE_CELL_VALUE:
 
 				// get the current cell and 
@@ -99,7 +109,12 @@ public class Program {
 				break;
 				case MOVE_POINTER_UP:
 				this.pointer++;
-				this.addCell();
+				
+				// if the pointer is higher than the size of the 
+				// cells list -> add new cell
+				if (this.pointer >= this.cells.size()) {
+					this.addCell();
+				}
 				break;
 				case MOVE_POINTER_DOWN:
 				this.pointer--;
@@ -121,6 +136,9 @@ public class Program {
 				break;
 				case START_LOOP:
 
+				// get the pointer of the loop's cell 
+				int loopsCellIndex = this.pointer;
+
 				// find the index of the closing loop 
 				//
 				// for every opening loop the loop index will increase 
@@ -132,31 +150,40 @@ public class Program {
 				// -> go from the current position until the
 				// closing loop is found
 				int loopIndex = 0;
-
 				// the index at which the loop ends
-				int endOfTheLoopIndex;
-				for (int j = i; j < this.actions.size(); j++) {
-					if (this.actions.get(j) == Actions.START_LOOP) {
+				int endOfTheLoopIndex =0;
+				for (int j = i; j < instructions.size(); j++) {
+					if (instructions.get(j) == Actions.START_LOOP) {
 						loopIndex++;
-					} else if (this.actions.get(j) == Actions.END_LOOP) {
+					} else if (instructions.get(j) == Actions.END_LOOP) {
 						loopIndex--;
 					}
 
 					// if the absolute end of the loop is found
-					if (loopIndex == 0 && this.actions.get(j) == Actions.END_LOOP) {
+					if (loopIndex == 0 && instructions.get(j) == Actions.END_LOOP) {
 						endOfTheLoopIndex = j;
-						System.out.println(endOfTheLoopIndex);
 						break;
 					}
 				}
 
+				// Get the loop content 
+				// go from i+1 to endOfTheLoopIndex so that the loop endings and starts are excluded
+				Instructions loop = instructions.getInterval(i+1, endOfTheLoopIndex);
+
+				
+				// run the private run function for as long as the value of the loop's cell 
+				// is not equal 0 
+				while (this.cells.get(loopsCellIndex).getValue() != 1) {
+
+					// run the private run functions with the loop's instructions 
+					this.run(loop);
+				}
 
 				break;
 				case END_LOOP:
 				break;
 			}
 		}
-		System.out.println("");
 	}
 
 	public void visualize() {

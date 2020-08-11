@@ -10,7 +10,7 @@ public class Tokenizer {
 
     // the list of actions 
     // -> the stack of the program
-    private List<Actions> actions;
+    private Instructions instructions;
     
     public Tokenizer(String code) {
 
@@ -18,35 +18,35 @@ public class Tokenizer {
         this.code = code;
 
         // initialize actions
-        this.actions = new ArrayList<>();
+        this.instructions = new Instructions();
 
         // Iterate over code and tokenize it
         for (char token : code.toCharArray()) {
             
             switch (token) {
                 case '+':
-                actions.add(Actions.INCREASE_CELL_VALUE);
+                instructions.add(Actions.INCREASE_CELL_VALUE);
                 break;
                 case '-':
-                actions.add(Actions.DECREASE_CELL_VALUE);
+                instructions.add(Actions.DECREASE_CELL_VALUE);
                 break;
                 case '>':
-                actions.add(Actions.MOVE_POINTER_UP);
+                instructions.add(Actions.MOVE_POINTER_UP);
                 break;
                 case '<':
-                actions.add(Actions.MOVE_POINTER_DOWN);
+                instructions.add(Actions.MOVE_POINTER_DOWN);
                 break;
                 case '.':
-                actions.add(Actions.PRINT);
+                instructions.add(Actions.PRINT);
                 break;
                 case ',':
-                actions.add(Actions.READ);
+                instructions.add(Actions.READ);
                 break;
                 case '[':
-                actions.add(Actions.START_LOOP);
+                instructions.add(Actions.START_LOOP);
                 break;
                 case ']':
-                actions.add(Actions.END_LOOP);
+                instructions.add(Actions.END_LOOP);
                 break;
                 default:
             }
@@ -54,8 +54,8 @@ public class Tokenizer {
     }
 
 
-    public List<Actions> getActions() {
-        return this.actions;
+    public Instructions getInstructions() {
+        return this.instructions;
     }
 
     public String getCode() {
