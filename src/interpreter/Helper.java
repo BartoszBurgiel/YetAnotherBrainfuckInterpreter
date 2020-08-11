@@ -59,27 +59,82 @@ public class Helper {
             // check if the current char is illegal 
             if (!isLegalCharacter(c)) {
 
-                // complete the line 
-                // -> get to the end of it 
-                for (int i = charCount; code.charAt(i) != '\n'; i++) {
-                    line = line + code.charAt(i);
+                // Divide the code to lines
+                String[] lines = code.split("\n");
 
-                    // if i is equal to the length of the code 
-                    // abort -> no new line will be found
-                    if (i == code.length()-1) {
-                        break;
+                // if the number of lines is greater than 2 
+                // print the fancy line display like:
+                // 1 | +++++
+                // 2 | +++3++[
+                //        ^
+                // 3 | >+++[
+                //
+                // else -> print just the affected line
+
+                // check the number of the lines 
+                if (lines.length > 2) {
+                    
+                    // margin so that the pointer to the illegal character will be displayed right 
+                    int margin = 5;
+                    
+                    // if the line where the illigal character is at
+                    // is not the first, nor the last 
+                    // -> display it as the middle line 
+                    if (lineCount != 0 && lineCount != lines.length-1) {
+    
+                        // prepare the fancy line display 
+                        // format to add the space margin for the msg row
+                        String fancyLineFormat = String.format("%%-3d| %%s\n%%-3d| %%s\n%%%ds\n%%-3d| %%s", rowCount+margin);
+
+                        line = String.format(fancyLineFormat, 
+                                        lineCount, lines[lineCount-1], 
+                                        lineCount+1, lines[lineCount], 
+                                        "^",
+                                        lineCount+2, lines[lineCount+1]);
+                    } if (lineCount == 0) {
+                        // if the illegal character is in the 1st line 
+
+                        // prepare the fancy line display 
+                        // format to add the space margin for the msg row
+                        String fancyLineFormat = String.format("%%-3d| %%s\n%%%ds\n%%-3d| %%s\n%%-3d| %%s", rowCount+margin);
+                        line = String.format(fancyLineFormat, 
+                                    lineCount+1, lines[lineCount], 
+                                    "^",
+                                    lineCount+2, lines[lineCount+1], 
+                                    lineCount+3, lines[lineCount+2]);
+                    } if (lineCount == lines.length-1) {
+                        // it the illegal character is in the last line
+
+                        // prepare the fancy line display 
+                        // format to add the space margin for the msg row
+                        String fancyLineFormat = String.format("%%-3d| %%s\n%%-3d| %%s\n%%-3d| %%s\n%%%ds\n", rowCount+margin);
+                        line = String.format(fancyLineFormat, 
+                                    lineCount-1, lines[lineCount-2], 
+                                    lineCount, lines[lineCount-1], 
+                                    lineCount+1, lines[lineCount],
+                                    "^");
                     }
-                } 
+                } else {
+
+                    // complete the line 
+                    for (int i = charCount; i < code.length(); i++) {
+                        line = line + code.charAt(i);
+
+                        // if a line break or end of code is found 
+                        // -> break
+                        if (code.charAt(i) == '\n') {
+                            break;
+                        }
+                    }
+
+                    // add the pointer to the illegal character
+                    String tempPointerFormat = String.format("\n%%%ds", rowCount);
+                    line += String.format(tempPointerFormat, "^");
+                }
 
                 // compose the panic message
                 String msg = String.format("Illegal character found at \nLine %d, row %d\n\n%s\n", lineCount, rowCount, line);
 
-                // get to the row where the illegal character is at
-                // and set a pointer to the char
-                for (int i = 0; i < rowCount-1; i++) {
-                    msg = msg + " ";
-                }
-                msg += "^";
                 panic(msg);
             }
         }
