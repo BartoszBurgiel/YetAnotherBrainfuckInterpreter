@@ -1,7 +1,11 @@
 package interpreter;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Program {
 
@@ -19,7 +23,34 @@ public class Program {
 	private Instructions instructions;
 
 	// Basic constructor
-	public Program() {
+	public Program(File file) {
+
+		// Define a scanner 
+		Scanner scanner = null;
+
+		// create a scanner for the file
+		try{
+		scanner = new Scanner(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// read the file's content into the string
+		String content = scanner.useDelimiter("\\A").next();
+
+		// close the scanner
+		scanner.close(); 
+
+		// initiate code 
+		this.code = content;
+
+		// create a new tokenizer
+		Tokenizer t = new Tokenizer(this.code);
+
+		// set the actions member variable
+		this.instructions = t.getInstructions();
+
+		// initiate the cells
 		this.cells = new ArrayList<Cell>();
 
 	}
