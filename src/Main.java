@@ -1,5 +1,4 @@
 import java.io.File;
-
 import interpreter.Program;
 
 public class Main {
@@ -10,7 +9,7 @@ public class Main {
 
 		Program p = new Program(new File(path));
 		p.run();
-		p.print();
+		// p.print();
 	}
 
 }
