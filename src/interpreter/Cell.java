@@ -14,7 +14,7 @@ public class Cell {
 		this.value = 0;
 
 		// declare the template
-		this.template = "%d: Value: %d\n";
+		this.template = "%d | %d";
 	}
 
 	// increase the value of the content bu the given amount
@@ -31,6 +31,12 @@ public class Cell {
 	// value's getter
 	public int getValue() {
 		return this.value;
+	}
+
+	@Override
+	// return the cell's value as an ASCII character
+	public String toString() {
+		return Character.toString((char) this.value);
 	}
 
 	// Print the cell's data

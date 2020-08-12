@@ -10,36 +10,48 @@ public class Program {
 	// all cells of the program
 	private List<Cell> cells;
 
+	// the source code of the program
 	private String code;
+
+	// the string output of the program
+	private String output;
 
 	// the value of the pointer
 	// -> the cell that the pointer points to
 	private int pointer;
 
+	// Options of how the program should execute
+	private Options options;
+
 	// interpreted code, ready to execute
 	private Instructions instructions;
 
+	// constructor with the options file
+	public Program(File file, File optionsFile) {
+		this.output = "";
+		this.options = new Options(optionsFile);
+
+		this.code = this.getContentFromAFile(file);
+
+		this.prepareCode();
+
+		// create a new tokenizer
+		Tokenizer t = new Tokenizer(this.code);
+
+		// set the actions member variable
+		this.instructions = t.getInstructions();
+
+		// initiate the cells
+		this.cells = new ArrayList<Cell>();
+	}
+
 	// Basic constructor
 	public Program(File file) {
+		this.output = "";
 
-		// Define a scanner
-		Scanner scanner = null;
+		this.options = new Options(true, true);
 
-		// create a scanner for the file
-		try {
-			scanner = new Scanner(file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// read the file's content into the string
-		String content = scanner.useDelimiter("\\A").next();
-
-		// close the scanner
-		scanner.close();
-
-		// initiate code
-		this.code = content;
+		this.code = this.getContentFromAFile(file);
 
 		this.prepareCode();
 
@@ -56,6 +68,7 @@ public class Program {
 
 	// Constructor where the brainfuck code is provided
 	public Program(String code) {
+		this.output = "";
 
 		this.code = code;
 
@@ -74,16 +87,17 @@ public class Program {
 	// print all program's data
 	public void print() {
 
-		// prepare the template
-		String template = new String("Pointer is on the: %d\nTotal number of the cells: %d\n\n");
-		System.out.printf(template, this.pointer, this.cells.size());
-
-		// print the values of the cells
-		System.out.println("Values of each cells");
-
+		System.out.println("");
 		for (int i = 0; i < cells.size(); i++) {
 
 			cells.get(i).print(i);
+
+			// print pointer
+			if (i == this.pointer) {
+				System.out.println("<");
+			} else {
+				System.out.println("");
+			}
 		}
 	}
 
@@ -106,13 +120,14 @@ public class Program {
 
 		// run the private run method and pass the
 		// classe's instructions
-		this.run(this.instructions);
+		this.run(this.instructions, 0);
 
-		System.out.println("");
+		// print the generated output
+		System.out.println(this.output);
 	}
 
 	// run the given instructions
-	private void run(Instructions instructions) {
+	private void run(Instructions instructions, int globalI) {
 		// iterate over the instructions
 		for (int i = 0; i < instructions.size(); i++) {
 
@@ -128,7 +143,7 @@ public class Program {
 
 					// check the value of the current cell
 					if (this.getCurrentCell().getValue() < 0) {
-						Helper.printErrorMessage(code, Helper.NEGATIVE_CELL_VALUE_STRING, i);
+						Helper.printErrorMessage(code, Helper.NEGATIVE_CELL_VALUE_STRING, i + globalI);
 					}
 
 					break;
@@ -146,18 +161,27 @@ public class Program {
 
 					// check if the pointer gets below zero
 					if (this.pointer < 0) {
-						System.out.printf("Size of the instructions: %d", this.instructions.size());
-						Helper.printErrorMessage(code, Helper.NEGATIVE_POINTER_STRING, i);
+						Helper.printErrorMessage(code, Helper.NEGATIVE_POINTER_STRING, i + globalI);
 					}
 					break;
 				case PRINT:
 
-					// print the cell's value
-					//
-					// the print method is used for debugging
-					System.out.print((char) this.getCurrentCell().getValue());
+					// print the cell's value dependent on the options
+					this.output += this.options.printCell(this.getCurrentCell());
 					break;
 				case READ:
+
+					if (this.options.printInputChar()) {
+						System.out.print(":");
+					}
+
+					// get the input
+					Scanner in = new Scanner(System.in);
+					int num = in.nextInt();
+
+					// write num to the cell
+					this.getCurrentCell().increase(num);
+
 					break;
 				case START_LOOP:
 
@@ -204,7 +228,7 @@ public class Program {
 					while (this.cells.get(loopsCellIndex).getValue() != 1) {
 
 						// run the private run functions with the loop's instructions
-						this.run(loop);
+						this.run(loop, i);
 						numberOfIterations++;
 						Helper.checkForEndlessLoop(numberOfIterations);
 					}
@@ -213,12 +237,34 @@ public class Program {
 				case END_LOOP:
 					break;
 			}
+			globalI++;
 		}
 	}
 
 	// prepareCode removes all whitespace and check for illegal characters
 	private void prepareCode() {
 		Helper.checkForIllegalCharacters(this.code);
+	}
+
+	private String getContentFromAFile(File file) {
+
+		// Define a scanner
+		Scanner scanner = null;
+
+		// create a scanner for the file
+		try {
+			scanner = new Scanner(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// read the file's content into the string
+		String content = scanner.useDelimiter("\\A").next();
+
+		// close the scanner
+		scanner.close();
+
+		return content;
 	}
 
 	public void visualize() {

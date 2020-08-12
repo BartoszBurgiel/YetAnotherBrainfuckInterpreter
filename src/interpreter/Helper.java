@@ -23,7 +23,7 @@ public class Helper {
 	final static public String NEGATIVE_POINTER_STRING = "A pointer can not be negative.\n";
 
 	// Endless loops
-	final static public int ENDLESS_LOOP_LIMIT_INT = 1000000;
+	final static public int ENDLESS_LOOP_LIMIT_INT = 100000000;
 	final static public String ENDLESS_LOOP_STRING = String
 			.format("Endless loop detected -> more than %d iterations occured", ENDLESS_LOOP_LIMIT_INT);
 
@@ -44,7 +44,9 @@ public class Helper {
 		String line = "";
 
 		// iterate over the code and find the illegal characters
-		for (char c : code.toCharArray()) {
+		for (int i = 0; i < code.length(); i++) {
+
+			char c = code.charAt(i);
 
 			// increase the counters
 			rowCount++;
@@ -209,6 +211,9 @@ public class Helper {
 			return true;
 		}
 
+		// iterate over all legal characters and
+		// if c is equal to any of them
+		// return true
 		for (char lC : LEGAL_CHARACTERS) {
 			if (lC == c) {
 				return true;
