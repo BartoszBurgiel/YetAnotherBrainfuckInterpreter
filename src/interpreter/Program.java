@@ -131,15 +131,18 @@ public class Program {
 		// iterate over the instructions
 		for (int i = 0; i < instructions.size(); i++) {
 
+			// current action as a shotcut for cleaner code
+			Action currentAction = instructions.get(i);
+
 			// determine what to do
-			switch (instructions.get(i)) {
+			switch (currentAction.getProcedure()) {
 				case INCREASE_CELL_VALUE:
 
 					// get the current cell and
-					this.getCurrentCell().increase(1);
+					this.getCurrentCell().increase(currentAction.getIterations());
 					break;
 				case DECREASE_CELL_VALUE:
-					this.getCurrentCell().decrease(1);
+					this.getCurrentCell().decrease(currentAction.getIterations());
 
 					// check the value of the current cell
 					if (this.getCurrentCell().getValue() < 0) {
@@ -202,14 +205,14 @@ public class Program {
 					// the index at which the loop ends
 					int endOfTheLoopIndex = 0;
 					for (int j = i; j < instructions.size(); j++) {
-						if (instructions.get(j) == Actions.START_LOOP) {
+						if (instructions.get(j).getProcedure() == Procedures.START_LOOP) {
 							loopIndex++;
-						} else if (instructions.get(j) == Actions.END_LOOP) {
+						} else if (instructions.get(j).getProcedure() == Procedures.END_LOOP) {
 							loopIndex--;
 						}
 
 						// if the absolute end of the loop is found
-						if (loopIndex == 0 && instructions.get(j) == Actions.END_LOOP) {
+						if (loopIndex == 0 && instructions.get(j).getProcedure() == Procedures.END_LOOP) {
 							endOfTheLoopIndex = j;
 							break;
 						}

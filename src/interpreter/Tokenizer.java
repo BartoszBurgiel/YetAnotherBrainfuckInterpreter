@@ -1,62 +1,121 @@
 package interpreter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Tokenizer {
 
-    // the brainfuck code
-    private String code;
+	// the brainfuck code
+	private String code;
 
-    // the list of actions
-    // -> the stack of the program
-    private Instructions instructions;
+	// current line that the tokenizer is at
+	private int currentLine;
 
-    public Tokenizer(String code) {
+	// the list of actions
+	// -> the stack of the program
+	private Instructions instructions;
 
-        // set the member variable
-        this.code = code;
+	public Tokenizer(String code) {
 
-        // initialize actions
-        this.instructions = new Instructions();
+		// initialize instructions
+		this.instructions = new Instructions();
 
-        // Iterate over code and tokenize it
-        for (int i = 0; i < code.toCharArray().length; i++) {
+		// initialize the current counter
+		this.currentLine = 1;
 
-            char token = code.toCharArray()[i];
-            switch (token) {
-                case '+':
-                    instructions.add(Actions.INCREASE_CELL_VALUE);
-                    break;
-                case '-':
-                    instructions.add(Actions.DECREASE_CELL_VALUE);
-                    break;
-                case '>':
-                    instructions.add(Actions.MOVE_POINTER_UP);
-                    break;
-                case '<':
-                    instructions.add(Actions.MOVE_POINTER_DOWN);
-                    break;
-                case '.':
-                    instructions.add(Actions.PRINT);
-                    break;
-                case ',':
-                    instructions.add(Actions.READ);
-                    break;
-                case '[':
-                    instructions.add(Actions.START_LOOP);
-                    break;
-                case ']':
-                    instructions.add(Actions.END_LOOP);
-                    break;
-                default:
+		// set the member variable
+		this.code = code;
 
-            }
-        }
-    }
+		// temporary variable to quick access
+		char[] tempArr = code.toCharArray();
 
-    public Instructions getInstructions() {
-        return this.instructions;
-    }
+		// Iterate over code and tokenize it
+		for (int i = 0; i < code.toCharArray().length; i++) {
 
-    public String getCode() {
-        return this.code;
-    }
+			char token = tempArr[i];
+
+			// increment the counters
+			if (token == '\n') {
+				this.currentLine++;
+
+			}
+
+			switch (token) {
+				case '+':
+					this.instructions.add(new Action(Procedures.INCREASE_CELL_VALUE, this.currentLine));
+					break;
+				case '-':
+					this.instructions.add(new Action(Procedures.DECREASE_CELL_VALUE, this.currentLine));
+					break;
+				case '>':
+					this.instructions.add(new Action(Procedures.MOVE_POINTER_UP, this.currentLine));
+					break;
+				case '<':
+					this.instructions.add(new Action(Procedures.MOVE_POINTER_DOWN, this.currentLine));
+					break;
+				case '.':
+					this.instructions.add(new Action(Procedures.PRINT, this.currentLine));
+					break;
+				case ',':
+					this.instructions.add(new Action(Procedures.READ, this.currentLine));
+					break;
+				case '[':
+					this.instructions.add(new Action(Procedures.START_LOOP, this.currentLine));
+					break;
+				case ']':
+					this.instructions.add(new Action(Procedures.END_LOOP, this.currentLine));
+					break;
+				default:
+
+			}
+		}
+
+		// Optimise and compress the procedures into actions
+		// Compress only the adding and subtracting
+		Instructions tempInstructions = new Instructions();
+
+		// iterate over the instructions and involve the iterations
+		for (int i = 0; i < this.instructions.size(); i++) {
+
+			// current procedure for easier and more effective access
+			Procedures currentProcedure = this.instructions.get(i).getProcedure();
+
+			// check if the instruction is either adding of subrtacting
+			if (currentProcedure == Procedures.INCREASE_CELL_VALUE
+					|| currentProcedure == Procedures.DECREASE_CELL_VALUE) {
+
+				// check how many times this procedure appears
+				for (int j = i; j < this.instructions.size(); j++) {
+
+					Procedures currentProcedureInCheck = this.instructions.get(j).getProcedure();
+
+					// if the procedure is different than the current procedure
+					// -> add the difference between i and j to the iterations
+					if (currentProcedureInCheck != currentProcedure) {
+						tempInstructions
+								.add(new Action(currentProcedure, this.instructions.get(j).getLinePosition(), j - i));
+
+						// skip to the next different procedure
+						i = j - 1;
+						break;
+					}
+				}
+			} else {
+				tempInstructions.add(new Action(currentProcedure, this.instructions.get(i).getLinePosition()));
+			}
+		}
+
+		// print the length of the tempInstructions
+
+		// replace this.instructions with tempInstructions
+		this.instructions = tempInstructions;
+	}
+
+	public Instructions getInstructions() {
+		return this.instructions;
+	}
+
+	public String getCode() {
+		return this.code;
+	}
 }
