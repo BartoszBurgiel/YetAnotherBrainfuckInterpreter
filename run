@@ -6,6 +6,6 @@ javac -d ../bin Main.java
 
 # go to the bin directory and execute the binaries
 cd ../bin 
-java Main
+java Main $1 $2 $3 $4 $5
 
  

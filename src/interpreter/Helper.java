@@ -12,9 +12,21 @@ public class Helper {
 	// array of all legal characters
 	final static public char[] LEGAL_CHARACTERS = { '-', '+', '>', '<', '.', ',', '[', ']' };
 
+	// Manual
+	final static public String MAN_STRING = "YetAnotherBrainfuckInterpreter\n\nAll rights preserved to Bartosz Burgiel.\nhttps://github.com/BartoszBurgiel\n\n\nUsage:\n$ YABI init <name>\n\tInitiate a sample brainfuck project that is suitable for the YABI's project standards.\n\n$ YABI exec <path-to-the-file>\n\tExecute a single brainfuck file.\n\n$ YABI run <path-to-the-project>\n\tExecute a project directory.";
+
 	/*
 	 * ERROR MESSAGES
 	 */
+
+	// No file found
+	final static public String NO_FILE_FOUND_IN_PROJECT = "Unfortunately one of the necessery project files (main.bf or options) were not found in the project directory.";
+
+	// Too few arguments
+	final static public String TOO_FEW_ARGUMENTS_STRING = "Too few arguments provided. To see what's missing run\nYABF --help";
+
+	// No arguments provided at all
+	final static public String NO_ARGUMENTS_STRING = "No arguments were provided.";
 
 	// Negative values
 	final static public String NEGATIVE_CELL_VALUE_STRING = "A cell can not contain any negative values.\n";
@@ -130,7 +142,7 @@ public class Helper {
 	}
 
 	// panic method to print the message and end the program
-	static void panic(String msg) {
+	public static void panic(String msg) {
 		System.out.println(msg);
 		System.exit(0);
 	}

@@ -1,0 +1,19 @@
+# compile the program to create fresh binaries
+
+# go to the src directory
+cd src
+
+# compile the file and the interpreter package and move the files to bin 
+javac -d ../bin Main.java
+
+# go back to root 
+cd ..
+
+# go to bin where all binaries are 
+cd bin 
+
+# build
+jar cfm YABI.jar Manifest.txt interpreter/*.class Main.class
+
+# move the build to the root 
+mv YABI.jar ..

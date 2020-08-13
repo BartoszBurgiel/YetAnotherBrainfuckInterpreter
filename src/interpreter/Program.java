@@ -3,7 +3,6 @@ package interpreter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Program {
@@ -32,7 +31,7 @@ public class Program {
 		this.output = "";
 		this.options = new Options(optionsFile);
 
-		this.code = this.getContentFromAFile(file);
+		this.code = Utils.getContentFromAFile(file);
 
 		this.prepareCode();
 
@@ -52,7 +51,7 @@ public class Program {
 
 		this.options = new Options();
 
-		this.code = this.getContentFromAFile(file);
+		this.code = Utils.getContentFromAFile(file);
 
 		this.prepareCode();
 
@@ -252,36 +251,6 @@ public class Program {
 	// prepareCode removes all whitespace and check for illegal characters
 	private void prepareCode() {
 		Helper.checkForIllegalCharacters(this.code);
-	}
-
-	private String getContentFromAFile(File file) {
-
-		// Define a scanner
-		Scanner scanner = null;
-
-		// create a scanner for the file
-		try {
-			scanner = new Scanner(file);
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-
-		// read the file's content into the string
-		String content = "";
-		try {
-			content = scanner.useDelimiter("\\A").next();
-		} catch (Exception e) {
-			// handle exception for the case when the file is empty
-			if (e instanceof NoSuchElementException) {
-				Helper.panic("The brainfuck file can not be empty.\n" + file.getAbsolutePath());
-			}
-		}
-
-		// close the scanner
-		scanner.close();
-
-		return content;
 	}
 
 	public void visualize() {
