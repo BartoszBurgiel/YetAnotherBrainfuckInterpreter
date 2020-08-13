@@ -3,6 +3,7 @@ package interpreter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Program {
@@ -49,7 +50,7 @@ public class Program {
 	public Program(File file) {
 		this.output = "";
 
-		this.options = new Options(true, true);
+		this.options = new Options();
 
 		this.code = this.getContentFromAFile(file);
 
@@ -67,9 +68,9 @@ public class Program {
 	}
 
 	// Constructor where the brainfuck code is provided
-	public Program(String code) {
+	public Program(String code, Options options) {
 		this.output = "";
-
+		this.options = options;
 		this.code = code;
 
 		this.prepareCode();
@@ -124,6 +125,10 @@ public class Program {
 
 		// print the generated output
 		System.out.println(this.output);
+
+		if (this.options.printCells()) {
+			this.print();
+		}
 	}
 
 	// run the given instructions
@@ -258,11 +263,20 @@ public class Program {
 		try {
 			scanner = new Scanner(file);
 		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
 
 		// read the file's content into the string
-		String content = scanner.useDelimiter("\\A").next();
+		String content = "";
+		try {
+			content = scanner.useDelimiter("\\A").next();
+		} catch (Exception e) {
+			// handle exception for the case when the file is empty
+			if (e instanceof NoSuchElementException) {
+				Helper.panic("The brainfuck file can not be empty.\n" + file.getAbsolutePath());
+			}
+		}
 
 		// close the scanner
 		scanner.close();

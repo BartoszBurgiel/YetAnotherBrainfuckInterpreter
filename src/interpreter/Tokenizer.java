@@ -1,8 +1,5 @@
 package interpreter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Tokenizer {
 
 	// the brainfuck code
