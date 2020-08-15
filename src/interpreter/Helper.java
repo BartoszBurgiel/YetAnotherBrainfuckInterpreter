@@ -10,33 +10,33 @@ public class Helper {
 	 */
 
 	// array of all legal characters
-	final static public char[] LEGAL_CHARACTERS = { '-', '+', '>', '<', '.', ',', '[', ']' };
+	public static final char[] LEGAL_CHARACTERS = { '-', '+', '>', '<', '.', ',', '[', ']' };
 
 	// Manual
-	final static public String MAN_STRING = "YetAnotherBrainfuckInterpreter\n\nAll rights preserved to Bartosz Burgiel.\nhttps://github.com/BartoszBurgiel\n\n\nUsage:\n$ YABI init <name>\n\tInitiate a sample brainfuck project that is suitable for the YABI's project standards.\n\n$ YABI exec <path-to-the-file>\n\tExecute a single brainfuck file.\n\n$ YABI run <path-to-the-project>\n\tExecute a project directory.";
+	public static final String MAN_STRING = "YetAnotherBrainfuckInterpreter\n\nAll rights preserved to Bartosz Burgiel.\nhttps://github.com/BartoszBurgiel\n\n\nUsage:\n$ YABI init <name>\n\tInitiate a sample brainfuck project that is suitable for the YABI's project standards.\n\n$ YABI exec <path-to-the-file>\n\tExecute a single brainfuck file.\n\n$ YABI run <path-to-the-project>\n\tExecute a project directory.";
 
 	/*
 	 * ERROR MESSAGES
 	 */
 
 	// No file found
-	final static public String NO_FILE_FOUND_IN_PROJECT = "Unfortunately one of the necessery project files (main.bf or options) were not found in the project directory.";
+	public static final String NO_FILE_FOUND_IN_PROJECT = "Unfortunately one of the necessery project files (main.bf or options) were not found in the project directory.";
 
 	// Too few arguments
-	final static public String TOO_FEW_ARGUMENTS_STRING = "Too few arguments provided. To see what's missing run\nYABF --help";
+	public static final String TOO_FEW_ARGUMENTS_STRING = "Too few arguments provided. To see what's missing run\nYABF --help";
 
 	// No arguments provided at all
-	final static public String NO_ARGUMENTS_STRING = "No arguments were provided.";
+	public static final String NO_ARGUMENTS_STRING = "No arguments were provided.";
 
 	// Negative values
-	final static public String NEGATIVE_CELL_VALUE_STRING = "A cell can not contain any negative values.\n";
+	public static final String NEGATIVE_CELL_VALUE_STRING = "A cell can not contain any negative values.\n";
 
 	// Negative pointer
-	final static public String NEGATIVE_POINTER_STRING = "A pointer can not be negative.\n";
+	public static final String NEGATIVE_POINTER_STRING = "A pointer can not be negative.\n";
 
 	// Endless loops
-	final static public int ENDLESS_LOOP_LIMIT_INT = 100000000;
-	final static public String ENDLESS_LOOP_STRING = String
+	public static final int ENDLESS_LOOP_LIMIT_INT = 100000000;
+	public static final String ENDLESS_LOOP_STRING = String
 			.format("Endless loop detected -> more than %d iterations occured", ENDLESS_LOOP_LIMIT_INT);
 
 	/*
@@ -44,7 +44,7 @@ public class Helper {
 	 */
 
 	// Check for illegal characters
-	static public void checkForIllegalCharacters(String code) {
+	public static void checkForIllegalCharacters(String code) {
 
 		// line count shows at what line the checker currently is
 		int lineCount = 0;
@@ -173,5 +173,10 @@ public class Helper {
 
 			panic(ENDLESS_LOOP_STRING);
 		}
+	}
+
+	// remove all comments from the source code 
+	static String removeComments(String code) {
+		return code.replaceAll("\\/\\/.*?\\n", "");
 	}
 }

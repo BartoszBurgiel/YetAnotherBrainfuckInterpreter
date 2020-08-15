@@ -49,7 +49,6 @@ public class Linter {
 		Matcher finds = loopRegex.matcher((CharSequence) this.newCode);
 
 		// iterate over finds and replace in this.code
-		System.out.println("loops:");
 		while (finds.find()) {
 
 			// Old unformatted found loop

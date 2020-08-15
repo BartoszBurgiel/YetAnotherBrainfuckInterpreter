@@ -42,7 +42,7 @@ public class Program {
 		this.instructions = t.getInstructions();
 
 		// initiate the cells
-		this.cells = new ArrayList<Cell>();
+		this.cells = new ArrayList<>();
 	}
 
 	// Basic constructor
@@ -62,7 +62,7 @@ public class Program {
 		this.instructions = t.getInstructions();
 
 		// initiate the cells
-		this.cells = new ArrayList<Cell>();
+		this.cells = new ArrayList<>();
 
 	}
 
@@ -75,7 +75,7 @@ public class Program {
 		this.prepareCode();
 
 		// initialize cells
-		this.cells = new ArrayList<Cell>();
+		this.cells = new ArrayList<>();
 
 		// tokenize the code
 		Tokenizer t = new Tokenizer(code);
@@ -250,10 +250,8 @@ public class Program {
 
 	// prepareCode removes all whitespace and check for illegal characters
 	private void prepareCode() {
+		this.code = Helper.removeComments(this.code);
 		Helper.checkForIllegalCharacters(this.code);
 	}
 
-	public void visualize() {
-
-	}
 }
