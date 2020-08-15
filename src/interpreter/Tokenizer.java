@@ -67,6 +67,10 @@ public class Tokenizer {
 			}
 		}
 
+		// add a blank instruction to this.instructions so that the 
+		// optimising algorithm won't skip last compressed elements 
+		this.instructions.add(new Action(Procedures.BLANK, 0));
+
 		// Optimise and compress the procedures into actions
 		// Compress only the adding and subtracting
 		Instructions tempInstructions = new Instructions();
@@ -93,7 +97,7 @@ public class Tokenizer {
 								.add(new Action(currentProcedure, this.instructions.get(j).getLinePosition(), j - i));
 
 						// skip to the next different procedure
-						i = j - 1;
+						i = j -1;
 						break;
 					}
 				}

@@ -243,6 +243,8 @@ public class Program {
 					break;
 				case END_LOOP:
 					break;
+				case BLANK:
+					break;
 			}
 			globalI++;
 		}
