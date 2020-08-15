@@ -22,7 +22,7 @@ public class Project {
 
     // basic options file to kickstart a program
     static String optionsFileContent = new StringBuilder().append("printInfo=true\n").append("printInteger=false\n")
-            .append("inputChar=true\n").append("printCells=true\n").toString();
+            .append("inputChar=true\n").append("printCells=true\n").append("printInstructions=false\n").toString();
 
     // Initiate a project from a project directory
     public Project(String path) {

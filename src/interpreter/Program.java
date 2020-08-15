@@ -118,11 +118,12 @@ public class Program {
 		// initiate the 0th cell
 		this.addCell();
 
-		for (Action action : this.instructions.getInstructions()) {
-			System.out.print(action.getProcedure());
-			System.out.print(" ");
-			System.out.println(action.getIterations());
-
+		if (this.options.printInstructions()) {
+			for (Action action : this.instructions.getInstructions()) {
+				System.out.print(action.getProcedure());
+				System.out.print(" ");
+				System.out.println(action.getIterations());
+			}
 		}
 
 		// run the private run method and pass the
