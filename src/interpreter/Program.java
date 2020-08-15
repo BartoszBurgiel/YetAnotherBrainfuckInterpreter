@@ -78,7 +78,7 @@ public class Program {
 		this.cells = new ArrayList<>();
 
 		// tokenize the code
-		Tokenizer t = new Tokenizer(code);
+		Tokenizer t = new Tokenizer(this.code);
 
 		// set the actions member variable
 		this.instructions = t.getInstructions();
@@ -117,6 +117,13 @@ public class Program {
 	public void run() {
 		// initiate the 0th cell
 		this.addCell();
+
+		for (Action action : this.instructions.getInstructions()) {
+			System.out.print(action.getProcedure());
+			System.out.print(" ");
+			System.out.println(action.getIterations());
+
+		}
 
 		// run the private run method and pass the
 		// classe's instructions
