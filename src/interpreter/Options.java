@@ -132,6 +132,7 @@ public class Options {
 					break;
 				case "printInstructions":
 					this.printInstructions = Boolean.valueOf(lineDiv[1]);
+					break;
 				default:
 					Helper.panic("Illegal keyword found in the options\n\t-> " + line);
 			}
