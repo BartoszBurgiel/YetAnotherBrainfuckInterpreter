@@ -1,5 +1,7 @@
 package interpreter;
 
+import java.util.Scanner;
+
 public class Cell {
 
 	// value of the cell
@@ -42,5 +44,15 @@ public class Cell {
 	// Print the cell's data
 	public void print(int index) {
 		System.out.printf(this.template, index, this.value);
+	}
+
+	public void read(boolean printCharacter) {
+		if (printCharacter) {
+			System.out.print(":");
+		}
+		Scanner in = new Scanner(System.in);
+		int num = in.nextInt();
+		this.value = num;
+		in.close();
 	}
 }

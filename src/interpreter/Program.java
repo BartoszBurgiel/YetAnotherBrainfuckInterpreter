@@ -26,6 +26,9 @@ public class Program {
 	// interpreted code, ready to execute
 	private Instructions instructions;
 
+	// executer of the instructions 
+	private Executer executer;
+
 	// constructor with the options file
 	public Program(File file, File optionsFile) {
 		this.output = "";
@@ -43,6 +46,7 @@ public class Program {
 
 		// initiate the cells
 		this.cells = new ArrayList<>();
+		this.executer = new Executer(this);
 	}
 
 	// Basic constructor
@@ -63,6 +67,7 @@ public class Program {
 
 		// initiate the cells
 		this.cells = new ArrayList<>();
+		this.executer = new Executer(this);
 
 	}
 
@@ -82,6 +87,8 @@ public class Program {
 
 		// set the actions member variable
 		this.instructions = t.getInstructions();
+
+		this.executer = new Executer(this);
 	}
 
 	// print all program's data
@@ -101,6 +108,10 @@ public class Program {
 		}
 	}
 
+	public void printOutput() {
+		System.out.println(this.output);
+	}
+
 	// add an empty cell to the program
 	public void addCell() {
 		this.cells.add(new Cell());
@@ -111,151 +122,59 @@ public class Program {
 		return this.cells.get(this.pointer);
 	}
 
-	// run the program
-	// -> iterate over the set of the instructions
-	// and modify the cells
+	// Run the program by calling the executor 
+	// and update this' variables
 	public void run() {
-		// initiate the 0th cell
-		this.addCell();
-
-		if (this.options.printInstructions()) {
-			for (Action action : this.instructions.getInstructions()) {
-				System.out.print(action.getProcedure());
-				System.out.print(" ");
-				System.out.println(action.getIterations());
-			}
-		}
-
-		// run the private run method and pass the
-		// classe's instructions
-		this.run(this.instructions, 0);
-
-		// print the generated output
-		System.out.println(this.output);
-
-		if (this.options.printCells()) {
-			this.print();
-		}
+		Program temp = this.executer.Exec();
+		this.setCells(temp.getCells());
+		this.output = temp.getOutput();
+		this.pointer = temp.getPointer();
 	}
 
-	// run the given instructions
-	private void run(Instructions instructions, int globalI) {
-		// iterate over the instructions
-		for (int i = 0; i < instructions.size(); i++) {
 
-			// current action as a shotcut for cleaner code
-			Action currentAction = instructions.get(i);
+	// Getter and setter for the member variables
+	public List<Cell> getCells() {
+		return this.cells;
+	}
 
-			// determine what to do
-			switch (currentAction.getProcedure()) {
-				case INCREASE_CELL_VALUE:
+	public int getPointer() {
+		return this.pointer;
+	}
 
-					// get the current cell and
-					this.getCurrentCell().increase(currentAction.getIterations());
-					break;
-				case DECREASE_CELL_VALUE:
-					this.getCurrentCell().decrease(currentAction.getIterations());
+	public String getCode() {
+		return this.code;
+	}
 
-					// check the value of the current cell
-					if (this.getCurrentCell().getValue() < 0) {
-						Helper.printErrorMessage(code, Helper.NEGATIVE_CELL_VALUE_STRING, i + globalI);
-					}
+	public String getOutput() {
+		return this.output;
+	}
 
-					break;
-				case MOVE_POINTER_UP:
-					this.pointer++;
+	public Options getOptions() {
+		return this.options;
+	}
 
-					// if the pointer is higher than the size of the
-					// cells list -> add new cell
-					if (this.pointer >= this.cells.size()) {
-						this.addCell();
-					}
-					break;
-				case MOVE_POINTER_DOWN:
-					this.pointer--;
+	public Instructions getInstructions() {
+		return this.instructions;
+	}
 
-					// check if the pointer gets below zero
-					if (this.pointer < 0) {
-						Helper.printErrorMessage(code, Helper.NEGATIVE_POINTER_STRING, i + globalI);
-					}
-					break;
-				case PRINT:
+	public void increasePointer() {
+		this.pointer++;
+	}
 
-					// print the cell's value dependent on the options
-					this.output += this.options.printCell(this.getCurrentCell());
-					break;
-				case READ:
+	public void setCells(List<Cell> cells) {
+		this.cells = cells;
+	}
 
-					if (this.options.printInputChar()) {
-						System.out.print(":");
-					}
+	public void setPointer(int pointer) {
+		this.pointer = pointer;
+	}
 
-					// get the input
-					Scanner in = new Scanner(System.in);
-					int num = in.nextInt();
+	public void decreasePointer() {
+		this.pointer--;
+	}
 
-					// write num to the cell
-					this.getCurrentCell().increase(num);
-
-					break;
-				case START_LOOP:
-
-					// get the pointer of the loop's cell
-					int loopsCellIndex = this.pointer;
-
-					// find the index of the closing loop
-					//
-					// for every opening loop the loop index will increase
-					// and for the closing loop, the index will decrease
-					//
-					// if a closing loop is found and the index is equal to 0
-					// the end of the loop is found
-					//
-					// -> go from the current position until the
-					// closing loop is found
-					int loopIndex = 0;
-					// the index at which the loop ends
-					int endOfTheLoopIndex = 0;
-					for (int j = i; j < instructions.size(); j++) {
-						if (instructions.get(j).getProcedure() == Procedures.START_LOOP) {
-							loopIndex++;
-						} else if (instructions.get(j).getProcedure() == Procedures.END_LOOP) {
-							loopIndex--;
-						}
-
-						// if the absolute end of the loop is found
-						if (loopIndex == 0 && instructions.get(j).getProcedure() == Procedures.END_LOOP) {
-							endOfTheLoopIndex = j;
-							break;
-						}
-					}
-
-					// Get the loop content
-					// go from i+1 to endOfTheLoopIndex so that the loop endings and starts are
-					// excluded
-					Instructions loop = instructions.getInterval(i + 1, endOfTheLoopIndex);
-
-					// number of the iterations of the loop
-					int numberOfIterations = 0;
-
-					// run the private run function for as long as the value of the loop's cell
-					// is not equal 0
-					while (this.cells.get(loopsCellIndex).getValue() != 1) {
-
-						// run the private run functions with the loop's instructions
-						this.run(loop, i);
-						numberOfIterations++;
-						Helper.checkForEndlessLoop(numberOfIterations);
-					}
-
-					break;
-				case END_LOOP:
-					break;
-				case BLANK:
-					break;
-			}
-			globalI++;
-		}
+	public void setOutput(String output) {
+		this.output = output;
 	}
 
 	// prepareCode removes all whitespace and check for illegal characters
@@ -263,5 +182,6 @@ public class Program {
 		this.code = Helper.removeComments(this.code);
 		Helper.checkForIllegalCharacters(this.code);
 	}
+
 
 }
