@@ -63,5 +63,6 @@ public class Project {
 
     public void run() {
         this.program.run();
+        this.program.printOutput();
     }
 }
