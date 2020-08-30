@@ -78,6 +78,10 @@ public class Options {
 		return this.inputChar;
 	}
 
+	public boolean printInteger() {
+		return this.printInteger;
+	}
+
 	public boolean printCells() {
 		return this.printCells;
 	}

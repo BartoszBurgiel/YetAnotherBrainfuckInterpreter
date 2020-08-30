@@ -31,7 +31,7 @@ public class Executer {
 	// and modify the cells
 	private void run() {
 		// initiate the 0th cell
-		this.program.addCell();
+		this.program.addCell(1);
 
 		if (this.program.getOptions().printInstructions()) {
 			for (Action action : this.program.getInstructions().getInstructions()) {
@@ -78,16 +78,18 @@ public class Executer {
 
 					break;
 				case MOVE_POINTER_UP:
-					this.program.increasePointer();
+					this.program.increasePointer(currentAction.getIterations());
 
 					// if the pointer is higher than the size of the
 					// cells list -> add new cell
 					if (this.program.getPointer() >= this.program.getCells().size()) {
-						this.program.addCell();
+
+						// add the difference between the pointer and the size
+						this.program.addCell(this.program.getPointer() - this.program.getCells().size()+1);
 					}
 					break;
 				case MOVE_POINTER_DOWN:
-					this.program.decreasePointer();
+					this.program.decreasePointer(currentAction.getIterations());
 
 					// check if the pointer gets below zero
 					if (this.program.getPointer() < 0) {
@@ -98,6 +100,12 @@ public class Executer {
 
 					// print the cell's value dependent on the options
 					this.output += this.program.getOptions().printCell(this.program.getCurrentCell());
+					
+					// if only numbers should be printed 
+					// add a space between each number
+					if (this.program.getOptions().printInteger()) {
+						this.output += " ";
+					}
 					break;
 				case READ:
 

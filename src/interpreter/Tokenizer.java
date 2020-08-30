@@ -83,7 +83,9 @@ public class Tokenizer {
 
 			// check if the instruction is either adding of subrtacting
 			if (currentProcedure == Procedures.INCREASE_CELL_VALUE
-					|| currentProcedure == Procedures.DECREASE_CELL_VALUE) {
+					|| currentProcedure == Procedures.DECREASE_CELL_VALUE 
+					|| currentProcedure == Procedures.MOVE_POINTER_DOWN 
+					|| currentProcedure == Procedures.MOVE_POINTER_UP ) {
 
 				// check how many times this procedure appears
 				for (int j = i; j < this.instructions.size(); j++) {
@@ -107,6 +109,11 @@ public class Tokenizer {
 		}
 
 		// print the length of the tempInstructions
+		// for (Action action : tempInstructions.getInstructions()) {
+		// 	System.out.print(action.getProcedure());
+		// 	System.out.print(" ");
+		// 	System.out.println(action.getIterations());
+		// }
 
 		// replace this.instructions with tempInstructions
 		this.instructions = tempInstructions;

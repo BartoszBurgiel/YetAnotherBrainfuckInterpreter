@@ -111,9 +111,11 @@ public class Program {
 		System.out.println(this.output);
 	}
 
-	// add an empty cell to the program
-	public void addCell() {
-		this.cells.add(new Cell());
+	// add n empty cells to the program
+	public void addCell(int n) {
+		for (int i = 0; i < n; i++) {
+			this.cells.add(new Cell());
+		}
 	}
 
 	// get the cell at which the pointer points
@@ -156,8 +158,8 @@ public class Program {
 		return this.instructions;
 	}
 
-	public void increasePointer() {
-		this.pointer++;
+	public void increasePointer(int n) {
+		this.pointer+=n;
 	}
 
 	public void setCells(List<Cell> cells) {
@@ -168,8 +170,8 @@ public class Program {
 		this.pointer = pointer;
 	}
 
-	public void decreasePointer() {
-		this.pointer--;
+	public void decreasePointer(int n) {
+		this.pointer-=n;
 	}
 
 	public void setOutput(String output) {
