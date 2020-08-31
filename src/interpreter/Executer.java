@@ -10,11 +10,11 @@ public class Executer {
 
     private String output;
 
-    private String code; 
+    // private String code; 
 
     public Executer(Program program) {
         this.program = program;
-        this.code = this.program.getCode();
+        // this.code = this.program.getCode();
         this.output = "";
 
     }
@@ -73,7 +73,8 @@ public class Executer {
 
 					// check the value of the current cell
 					if (this.program.getCurrentCell().getValue() < 0) {
-						Helper.printErrorMessage(code, Helper.NEGATIVE_CELL_VALUE_STRING, i + globalI);
+						// Helper.printErrorMessage(code, Helper.NEGATIVE_CELL_VALUE_STRING, i + globalI);
+						Helper.panic(Helper.NEGATIVE_CELL_VALUE_STRING);
 					}
 
 					break;
@@ -93,7 +94,9 @@ public class Executer {
 
 					// check if the pointer gets below zero
 					if (this.program.getPointer() < 0) {
-						Helper.printErrorMessage(code, Helper.NEGATIVE_POINTER_STRING, i + globalI);
+						// Helper.printErrorMessage(code, Helper.NEGATIVE_POINTER_STRING, i + globalI);
+						Helper.panic(Helper.NEGATIVE_POINTER_STRING);
+					
 					}
 					break;
 				case PRINT:
