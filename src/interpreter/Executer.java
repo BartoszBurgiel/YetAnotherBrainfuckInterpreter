@@ -74,7 +74,10 @@ public class Executer {
 					// check the value of the current cell
 					if (this.program.getCurrentCell().getValue() < 0) {
 						// Helper.printErrorMessage(code, Helper.NEGATIVE_CELL_VALUE_STRING, i + globalI);
-						Helper.panic(Helper.NEGATIVE_CELL_VALUE_STRING);
+					
+						if (!this.program.getOptions().allowNegativeValues()) {
+							Helper.panic(Helper.NEGATIVE_CELL_VALUE_STRING);
+						}
 					}
 
 					break;

@@ -23,6 +23,9 @@ public class Options {
 	// tell if program's optimised instructions should be printed
 	private boolean printInstructions;
 
+	// tell if negative values in the cells are allowed
+	private boolean allowNegativeValues;
+
 	// tell if an input 'notifier' should be displayed
 	// -> when an input occours a ':' is printed like this:
 	//
@@ -59,6 +62,7 @@ public class Options {
 	public Options() {
 		this.inputChar = true;
 		this.printCells = true;
+		this.allowNegativeValues = true;
 		this.printInfo = false;
 		this.printInteger = false;
 		this.printInstructions = false;
@@ -88,6 +92,10 @@ public class Options {
 
 	public boolean printInstructions() {
 		return this.printInstructions;
+	}
+
+	public boolean allowNegativeValues() {
+		return this.allowNegativeValues;
 	}
 
 	private String getContentFromAFile(File file) {
@@ -137,6 +145,9 @@ public class Options {
 				case "printInstructions":
 					this.printInstructions = Boolean.valueOf(lineDiv[1]);
 					break;
+				case "allowNegativeValues":
+					this.allowNegativeValues = Boolean.valueOf(lineDiv[1]);
+					break;
 				default:
 					Helper.panic("Illegal keyword found in the options\n\t-> " + line);
 			}
@@ -150,6 +161,7 @@ public class Options {
 			System.out.println("printCells\t= " + this.printCells);
 			System.out.println("printInfo\t= " + this.printInfo);
 			System.out.println("printInstructions\t= " + this.printInstructions);
+			System.out.println("allowNegativeValues\t= " + this.allowNegativeValues);
 		}
 	}
 }
