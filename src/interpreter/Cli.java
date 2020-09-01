@@ -72,7 +72,7 @@ public class Cli {
 				Program program = new Program(new File(pathToTheFile));
 				program.run();
 				program.printOutput();
-
+				break;
 			case "--help":
 				System.out.println(Helper.MAN_STRING);
 				break;
