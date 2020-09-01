@@ -46,7 +46,7 @@ public class Executer {
 		this.run(this.program.getInstructions(), 0);
 
 		// print the generated output
-		System.out.println(this.output);
+		// System.out.println(this.output);
 
 		if (this.program.getOptions().printCells()) {
 			this.program.print();
