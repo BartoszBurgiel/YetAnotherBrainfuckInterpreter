@@ -168,6 +168,21 @@ public class Executer {
 					}
 
 					break;
+				case SQUASHED_LOOP:
+
+					// multiply the iterations of the 
+					// next procedure by the 
+					// value of the current cell 
+					// and then set the value of the current 
+					// cell to 0
+					int tempVal = this.program.getCurrentCell().getValue();
+
+					// multiply the next iterations 
+					this.program.getInstructions().get(i+1).setIterations(this.program.getInstructions().get(i+1).getIterations()*tempVal);
+					
+					// set current cell's value to 0 
+					this.program.getCurrentCell().decrease(tempVal);
+					break;
 				case END_LOOP:
 					break;
 				case BLANK:

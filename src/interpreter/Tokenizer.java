@@ -71,52 +71,10 @@ public class Tokenizer {
 		// optimising algorithm won't skip last compressed elements 
 		this.instructions.add(new Action(Procedures.BLANK, 0));
 
-		// Optimise and compress the procedures into actions
-		// Compress only the adding and subtracting
-		Instructions tempInstructions = new Instructions();
+		Optimizer opt = new Optimizer(this.instructions);
 
-		// iterate over the instructions and involve the iterations
-		for (int i = 0; i < this.instructions.size(); i++) {
-
-			// current procedure for easier and more effective access
-			Procedures currentProcedure = this.instructions.get(i).getProcedure();
-
-			// check if the instruction is either adding of subrtacting
-			if (currentProcedure == Procedures.INCREASE_CELL_VALUE
-					|| currentProcedure == Procedures.DECREASE_CELL_VALUE 
-					|| currentProcedure == Procedures.MOVE_POINTER_DOWN 
-					|| currentProcedure == Procedures.MOVE_POINTER_UP ) {
-
-				// check how many times this procedure appears
-				for (int j = i; j < this.instructions.size(); j++) {
-
-					Procedures currentProcedureInCheck = this.instructions.get(j).getProcedure();
-
-					// if the procedure is different than the current procedure
-					// -> add the difference between i and j to the iterations
-					if (currentProcedureInCheck != currentProcedure) {
-						tempInstructions
-								.add(new Action(currentProcedure, this.instructions.get(j).getLinePosition(), j - i));
-
-						// skip to the next different procedure
-						i = j -1;
-						break;
-					}
-				}
-			} else {
-				tempInstructions.add(new Action(currentProcedure, this.instructions.get(i).getLinePosition()));
-			}
-		}
-
-		// print the length of the tempInstructions
-		// for (Action action : tempInstructions.getInstructions()) {
-		// 	System.out.print(action.getProcedure());
-		// 	System.out.print(" ");
-		// 	System.out.println(action.getIterations());
-		// }
-
-		// replace this.instructions with tempInstructions
-		this.instructions = tempInstructions;
+		// replace this.instructions with optimized instructions
+		this.instructions = opt.run();
 	}
 
 	public Instructions getInstructions() {
