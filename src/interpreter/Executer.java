@@ -157,6 +157,13 @@ public class Executer {
 					// number of the iterations of the loop
 					int numberOfIterations = 0;
 
+					// skip if the cell's value is 0 
+					if (this.program.getCells().get(loopsCellIndex).getValue() <2) {
+						// skip to the end of the loop
+						i = endOfTheLoopIndex;
+						break;
+					}
+
 					// run the private run function for as long as the value of the loop's cell
 					// is not equal 0
 					while (this.program.getCells().get(loopsCellIndex).getValue() != 1) {
