@@ -73,8 +73,10 @@ public class Tokenizer {
 
 		Optimizer opt = new Optimizer(this.instructions);
 
-		// replace this.instructions with optimized instructions
+		// replace this.instructions with optimized instructions	
 		this.instructions = opt.run();
+
+		// System.out.println(this.instructions.getInstructions().size());
 	}
 
 	public Instructions getInstructions() {

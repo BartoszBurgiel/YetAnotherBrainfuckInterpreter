@@ -78,8 +78,14 @@ public class Optimizer {
     // procedure by the initial value of the loop cell
     private void destroyLoops() {
 
-        // get all loops
-        
+        // iterate over the optimized instructions
+        for (int i = 0; i < this.instructions.getInstructions().size(); i++) {
+            
+            // get a helper variable for the current action 
+            Action currentAction = this.instructions.getInstructions().get(i); 
+            // find a beginning of the loop
+            // if (this)
+        }
 
     }
 }

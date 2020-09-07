@@ -177,6 +177,9 @@ public class Helper {
 
 	// remove all comments from the source code 
 	static String removeComments(String code) {
+		// append a \n at the end of the code 
+		// to support the regex 
+		code = code + "\n";
 		return code.replaceAll("\\/\\/.*?\\n", "");
 	}
 }

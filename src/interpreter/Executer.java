@@ -158,7 +158,7 @@ public class Executer {
 					int numberOfIterations = 0;
 
 					// skip if the cell's value is 0 
-					if (this.program.getCells().get(loopsCellIndex).getValue() <2) {
+					if (this.program.getCells().get(loopsCellIndex).getValue() <1) {
 						// skip to the end of the loop
 						i = endOfTheLoopIndex;
 						break;
